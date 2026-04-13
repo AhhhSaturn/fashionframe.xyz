@@ -19,7 +19,7 @@ const { values } = parseArgs({
 	},
 	allowPositionals: true,
 });
-if (values.skipDownload) {
+if (values.skipDownload || Bun.env.SKIP_DOWNLOAD) {
 	console.log("Skipping Download");
 } else {
 	await downloadModules(["Warframes", "Cosmetics", "ColourPalettes"]);
@@ -29,7 +29,7 @@ const { warframeRouter } = await import("./routers/warframe");
 const { cosmeticsRouter } = await import("./routers/cosmetic");
 const { ColourPalettesRouter } = await import("./routers/colors");
 
-new Elysia()
+export const api = new Elysia()
 	.use(openapi(openapiConfig))
 	.guard({
 		headers: t.Object({

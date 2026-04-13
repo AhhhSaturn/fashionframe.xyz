@@ -43,6 +43,7 @@
         "lzma-js-simple-v2": "^1.2.3",
       },
       "devDependencies": {
+        "@elysiajs/eden": "^1.4.9",
         "@types/bun": "latest",
         "@types/lua-json": "^1.0.3",
       },

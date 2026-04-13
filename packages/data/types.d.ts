@@ -10,4 +10,5 @@ type ColourPalettes = {
 	description: string;
 	hexColours: { value: string }[];
 	excludeFromCodex: boolean;
+	codexSecret: boolean;
 };
