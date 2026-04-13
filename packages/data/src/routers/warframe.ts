@@ -6,8 +6,8 @@ const modules = {
 	WarframeList: await file("modules/WarframeList.json").json(),
 };
 
-export const warframeRouter = new Elysia({ prefix: "warframe" })
-	.get("/warframes", modules.WarframeList)
+export const warframeRouter = new Elysia({ prefix: "warframes" })
+	.get("/", modules.WarframeList)
 	.get("/:warframe", ({ params: { warframe }, status }) => {
 		if (!modules.Warframes[warframe])
 			return status(400, `"${warframe} is not a warframe"`);
