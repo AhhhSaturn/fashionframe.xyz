@@ -21,7 +21,7 @@ export const ColourPalettesRouter = new Elysia({
 				return item.name === paletteName;
 			})[0];
 
-			if (!palette) return status(400, `"${paletteName} is not a palette"`);
+			if (!palette) return status(400, `${paletteName} is not a palette`);
 
 			return palette;
 		},
@@ -32,6 +32,7 @@ export const ColourPalettesRouter = new Elysia({
 					uniqueName: t.String(),
 					name: t.String(),
 					description: t.String(),
+					codexSecret: t.Boolean(),
 					hexColours: t.Array(
 						t.Object({
 							value: t.String(),

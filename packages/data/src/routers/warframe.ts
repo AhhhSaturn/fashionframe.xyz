@@ -14,7 +14,7 @@ export const warframeRouter = new Elysia({ prefix: "warframes" })
 		"/:warframe",
 		({ params: { warframe }, status }) => {
 			if (!modules.Warframes[warframe])
-				return status(400, `"${warframe} is not a warframe"`);
+				return status(400, `${warframe} is not a warframe`);
 			return modules.Warframes[warframe];
 		},
 		{
