@@ -1,5 +1,6 @@
 import { write } from "bun";
 import { parse } from "lua-json";
+import { decompress } from "lzma-js-simple-v2";
 
 const split = (module: string, data: any) => {
 	const files = new Map<string, any>();
@@ -88,6 +89,47 @@ const split = (module: string, data: any) => {
 
 const getUrl = (module: string) =>
 	`https://wiki.warframe.com/w/Module:${module}/data?action=raw`;
+const contentUrl = (content: string) =>
+	`http://content.warframe.com/PublicExport/Manifest/${content}`;
+
+const ColourPalettes = async () => {
+	console.time("ColourPalettes");
+	const compressedIndex = await fetch(
+		"https://origin.warframe.com/PublicExport/index_en.txt.lzma",
+	).then((res) => res.bytes());
+	console.timeLog("ColourPalettes", "Downloaded Index");
+
+	const index = (decompress(compressedIndex) as string).split("\r\n");
+	console.timeLog("ColourPalettes", "Decompressed Index");
+
+	const ColourPalettesHash = index.filter((i) => {
+		return i.includes("ExportFlavour");
+	})[0];
+	if (!ColourPalettesHash)
+		return console.warn("Failed to get colour picker hash");
+
+	const data = (await fetch(contentUrl(ColourPalettesHash)).then((res) =>
+		res.json(),
+	)) as { ExportFlavour: ColourPalettes[] };
+	console.timeLog("ColourPalettes", "Downloaded");
+
+	const palettes: ColourPalettes[] = [];
+	const paletteList: string[] = [];
+
+	for (const item of data.ExportFlavour) {
+		if (item.excludeFromCodex) continue;
+		if (!item.uniqueName.includes("ColourPicker")) continue;
+		palettes.push(item);
+		paletteList.push(item.name);
+	}
+	console.timeLog("ColourPalettes", "Split data file");
+
+	write(`modules/ColourPalettes.json`, JSON.stringify(palettes));
+	console.timeLog("ColourPalettes", "Wrote ColourPalettes.json");
+	write(`modules/ColourPaletteList.json`, JSON.stringify(paletteList));
+	console.timeLog("ColourPalettes", "Wrote ColourPaletteList.json");
+	console.timeEnd("ColourPalettes");
+};
 
 const download = async (module: string) => {
 	console.time(module);
@@ -112,7 +154,11 @@ const download = async (module: string) => {
 export const downloadModules = async (modules: string[]) => {
 	console.time("Updating Warframe Data");
 	for (const module of modules) {
-		await download(module);
+		if (module === "ColourPalettes") {
+			await ColourPalettes();
+		} else {
+			await download(module);
+		}
 	}
 	console.timeEnd("Updating Warframe Data");
 };

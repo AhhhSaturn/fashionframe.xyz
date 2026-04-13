@@ -22,11 +22,12 @@ const { values } = parseArgs({
 if (values.skipDownload) {
 	console.log("Skipping Download");
 } else {
-	await downloadModules(["Warframes", "Cosmetics"]);
+	await downloadModules(["Warframes", "Cosmetics", "ColourPalettes"]);
 }
 
 const { warframeRouter } = await import("./routers/warframe");
 const { cosmeticsRouter } = await import("./routers/cosmetic");
+const { ColourPalettesRouter } = await import("./routers/colors");
 
 new Elysia()
 	.use(openapi(openapiConfig))
@@ -51,6 +52,7 @@ new Elysia()
 	.get("version", ({ store: { version } }) => version)
 	.use(warframeRouter)
 	.use(cosmeticsRouter)
+	.use(ColourPalettesRouter)
 	.listen(3000, async ({ development, hostname, port }) => {
 		console.timeEnd("@fashionframe.xyz/data");
 
