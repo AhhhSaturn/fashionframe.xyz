@@ -1,5 +1,5 @@
 import { file } from "bun";
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 
 const modules = {
 	AnimationSet: await file("modules/AnimationSet.json").json(),
@@ -16,15 +16,33 @@ const modules = {
 };
 
 export const cosmeticsRouter = new Elysia({ prefix: "cosmetics" })
-	.get("/animationset", modules.AnimationSet)
-	.get("/ephemera", modules.Ephemera)
-	.get("/signa", modules.Signa)
-	.get("/syandanas", modules.Syandanas)
+	.get("/animationset", () => modules.AnimationSet, {
+		response: t.Array(t.String()),
+	})
+	.get("/ephemera", () => modules.Ephemera, {
+		response: t.Array(t.String()),
+	})
+	.get("/signa", () => modules.Signa, {
+		response: t.Array(t.String()),
+	})
+	.get("/syandanas", () => modules.Syandanas, {
+		response: t.Array(t.String()),
+	})
 	.group("/armor", (app) =>
 		app
-			.get("/arm", modules.Armor.Arm)
-			.get("/chest", modules.Armor.Chest)
-			.get("/leg", modules.Armor.Leg)
-			.get("/shoulder", modules.Armor.Shoulder)
-			.get("/misc", modules.Armor.Misc),
+			.get("/arm", () => modules.Armor.Arm, {
+				response: t.Array(t.String()),
+			})
+			.get("/chest", () => modules.Armor.Chest, {
+				response: t.Array(t.String()),
+			})
+			.get("/leg", () => modules.Armor.Leg, {
+				response: t.Array(t.String()),
+			})
+			.get("/shoulder", () => modules.Armor.Shoulder, {
+				response: t.Array(t.String()),
+			})
+			.get("/misc", () => modules.Armor.Misc, {
+				response: t.Array(t.String()),
+			}),
 	);

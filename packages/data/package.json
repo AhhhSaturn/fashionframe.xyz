@@ -2,7 +2,7 @@
 	"name": "@fashionframe.xyz/data",
 	"module": "src/index.ts",
 	"description": "Warframe Cosmetic API",
-	"version": "0.0.3",
+	"version": "1.0.0",
 	"type": "module",
 	"devDependencies": {
 		"@types/bun": "latest",
