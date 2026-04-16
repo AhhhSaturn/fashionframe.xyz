@@ -1,4 +1,5 @@
 import { parseArgs } from "node:util";
+import cors from "@elysiajs/cors";
 import openapi from "@elysiajs/openapi";
 import Elysia, { t } from "elysia";
 import { rateLimit } from "elysia-rate-limit";
@@ -30,6 +31,11 @@ const { cosmeticsRouter } = await import("./routers/cosmetic");
 const { ColourPalettesRouter } = await import("./routers/colors");
 
 export const api = new Elysia()
+	.use(
+		cors({
+			origin: true,
+		}),
+	)
 	.use(openapi(openapiConfig))
 	.guard({
 		headers: t.Object({
@@ -38,6 +44,8 @@ export const api = new Elysia()
 	})
 	.use(
 		rateLimit({
+			scoping: "scoped",
+			max: 100,
 			skip: ({ headers }) => {
 				if (headers.get("token") === Bun.env.RATE_LIMIT_BYPASS_KEY) {
 					return true;
@@ -53,18 +61,19 @@ export const api = new Elysia()
 	.get("/", ({ redirect }) => redirect("/openapi"), { detail: { hide: true } })
 	.use(warframeRouter)
 	.use(cosmeticsRouter)
-	.use(ColourPalettesRouter)
-	.listen(3000, async ({ development, hostname, port }) => {
-		console.timeEnd("@fashionframe.xyz/data");
+	.use(ColourPalettesRouter);
 
-		// for some reason bun doesn't like backticks unless i wrap it in a function
-		const ansi = Bun.markdown.ansi(
-			((
-				hostname: string,
-				port: string,
-				dev: boolean,
-				startTime: number,
-			) => `# @fashionframe.xyz/data | Warframe Cosmetic API
+api.listen(3000, async ({ development, hostname, port }) => {
+	console.timeEnd("@fashionframe.xyz/data");
+
+	// for some reason bun doesn't like backticks unless i wrap it in a function
+	const ansi = Bun.markdown.ansi(
+		((
+			hostname: string,
+			port: string,
+			dev: boolean,
+			startTime: number,
+		) => `# @fashionframe.xyz/data | Warframe Cosmetic API
 | | |
 |-|-|
 | ***Url*** | http://${hostname}:${port}/ |
@@ -73,12 +82,14 @@ export const api = new Elysia()
 | ***Env*** | ${dev ? "Development" : "Production"} |
 | ***Start Time*** | ${Math.floor(startTime / 1000000)}ms |
 `)(
-				hostname || "socket",
-				port ? port.toString() : "socket",
-				development,
-				Bun.nanoseconds(),
-			),
-		);
+			hostname || "socket",
+			port ? port.toString() : "socket",
+			development,
+			Bun.nanoseconds(),
+		),
+	);
 
-		console.log(ansi);
-	});
+	console.log(ansi);
+});
+
+export type API = typeof api;
