@@ -23,6 +23,6 @@ COPY --from=build /app/package.json package.json
 
 ENV NODE_ENV=production
 
-CMD ["./server -s"]
+CMD ["./server", "-s"]
 
 EXPOSE 3000
