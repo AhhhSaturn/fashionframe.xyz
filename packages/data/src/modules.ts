@@ -21,20 +21,20 @@ const split = (module: string, data: any) => {
 				};
 			}
 
-			files.set("WarframeList", warframeList);
+			files.set("WarframeList", warframeList.sort());
 			files.set("Warframes", warframes);
 			break;
 		}
 		case "Cosmetics": {
 			const rawCosmetics = data.Users;
 
-			files.set("Syandanas", rawCosmetics.Syandana.Equipments.Syandana);
+			files.set("Syandanas", rawCosmetics.Syandana.Equipments.Syandana.sort());
 			files.set(
 				"AnimationSet",
-				rawCosmetics["Animation Set"].Equipments["Animation Set"],
+				rawCosmetics["Animation Set"].Equipments["Animation Set"].sort(),
 			);
-			files.set("Signa", rawCosmetics.Signa.Equipments.Signa);
-			files.set("Ephemera", rawCosmetics.Ephemera.Equipments.Ephemera);
+			files.set("Signa", rawCosmetics.Signa.Equipments.Signa.sort());
+			files.set("Ephemera", rawCosmetics.Ephemera.Equipments.Ephemera.sort());
 
 			const chestArmor: string[] = [];
 			const legArmor: string[] = [];
@@ -72,11 +72,11 @@ const split = (module: string, data: any) => {
 				}
 			}
 
-			files.set("ChestArmor", chestArmor);
-			files.set("LegArmor", legArmor);
-			files.set("ShoulderArmor", shoulderArmor);
-			files.set("ArmArmor", armArmor);
-			files.set("MiscArmor", miscArmor);
+			files.set("ChestArmor", chestArmor.sort());
+			files.set("LegArmor", legArmor.sort());
+			files.set("ShoulderArmor", shoulderArmor.sort());
+			files.set("ArmArmor", armArmor.sort());
+			files.set("MiscArmor", miscArmor.sort());
 
 			break;
 		}
@@ -126,7 +126,7 @@ const ColourPalettes = async () => {
 
 	write(`modules/ColourPalettes.json`, JSON.stringify(palettes));
 	console.timeLog("ColourPalettes", "Wrote ColourPalettes.json");
-	write(`modules/ColourPaletteList.json`, JSON.stringify(paletteList));
+	write(`modules/ColourPaletteList.json`, JSON.stringify(paletteList.sort()));
 	console.timeLog("ColourPalettes", "Wrote ColourPaletteList.json");
 	console.timeEnd("ColourPalettes");
 };
