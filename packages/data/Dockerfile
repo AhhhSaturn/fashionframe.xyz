@@ -28,6 +28,6 @@ ENV NODE_ENV=production
 
 CMD ["./server"]
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "healthcheck" ]
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "./healthcheck" ]
 
 EXPOSE 3000
