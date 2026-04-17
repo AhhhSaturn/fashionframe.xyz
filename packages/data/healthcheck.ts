@@ -9,6 +9,6 @@ api.get().then((res) => {
 		process.exit(1);
 	} else {
 		console.log("healthy!");
-		process.exit(1);
+		process.exit(0);
 	}
 });
