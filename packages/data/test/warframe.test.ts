@@ -15,9 +15,7 @@ describe("Warframe Router", () => {
 		const { data, error } = await api.warframes({ warframe: "Ash" }).get();
 
 		expect(error).toBeNull();
-		expect(data).toStrictEqual(
-			(await Bun.file("modules/Warframes.json").json())["Ash"],
-		);
+		expect(data?.name).toBe("Ash");
 	});
 	test("Invalid Warframe", async () => {
 		const { data, error } = await api

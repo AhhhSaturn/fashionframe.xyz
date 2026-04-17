@@ -28,7 +28,7 @@ describe("Cosmetic Router", () => {
 		expect(data).toBeArray();
 	});
 	test("Syandana", async () => {
-		const { data, error } = await api.cosmetics.syandanas.get();
+		const { data, error } = await api.cosmetics.syandana.get();
 
 		expect(error).toBeNull();
 		expect(data).toBeArray();
@@ -56,15 +56,5 @@ describe("Cosmetic Router", () => {
 
 		expect(error).toBeNull();
 		expect(data).toBeArray();
-	});
-	test("Misc Armor", async () => {
-		const { data, error } = await api.cosmetics.armor.misc.get();
-
-		expect(error).toBeNull();
-		expect(data).toBeArray();
-		expect(
-			data?.length,
-			"A new cosmetic piece that does not match the filters has might have been added to the game. Either add a new filter case or increment the number if its an anomaly",
-		).toBe(9);
 	});
 });

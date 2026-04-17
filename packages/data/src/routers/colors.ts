@@ -1,44 +1,26 @@
 import { file } from "bun";
-import Elysia, { t } from "elysia";
+import Elysia from "elysia";
 
 const modules = {
 	ColourPalettes: (await file(
-		"modules/ColourPalettes.json",
-	).json()) as ColourPalettes[],
-	ColourPaletteList: await file("modules/ColourPaletteList.json").json(),
+		"modules/Palettes.json",
+	).json()) as ColourPalette[],
+	ColourPaletteList: (await file(
+		"modules/PaletteList.json",
+	).json()) as string[],
 };
 
 export const ColourPalettesRouter = new Elysia({
 	prefix: "palettes",
 })
-	.get("/", () => modules.ColourPaletteList, {
-		response: t.Array(t.String()),
-	})
-	.get(
-		"/:palette",
-		({ params: { palette: paletteName }, status }) => {
-			const palette = modules.ColourPalettes.filter((item) => {
-				return item.name === paletteName;
-			})[0];
+	.get("/", () => modules.ColourPaletteList)
+	.get("/:palette", ({ params: { palette: paletteName }, status }) => {
+		const palette = modules.ColourPalettes.filter((item) => {
+			return item.name === paletteName;
+		})[0];
 
-			if (!palette) return status(400, `${paletteName} is not a palette`);
+		if (!palette)
+			return status(400, { error: `${paletteName} is not a palette` });
 
-			return palette;
-		},
-		{
-			response: {
-				400: t.String({ default: "{palette} is not a palette" }),
-				200: t.Object({
-					uniqueName: t.String(),
-					name: t.String(),
-					description: t.String(),
-					codexSecret: t.Boolean(),
-					hexColours: t.Array(
-						t.Object({
-							value: t.String(),
-						}),
-					),
-				}),
-			},
-		},
-	);
+		return palette;
+	});

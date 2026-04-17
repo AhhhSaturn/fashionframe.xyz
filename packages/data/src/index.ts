@@ -23,7 +23,7 @@ const { values } = parseArgs({
 if (values.skipDownload || Bun.env.SKIP_DOWNLOAD) {
 	console.log("Skipping Download");
 } else {
-	await downloadModules(["Warframes", "Cosmetics", "ColourPalettes"]);
+	await downloadModules(["Warframes", "Flavour", "Customs"]);
 }
 
 const { warframeRouter } = await import("./routers/warframe");

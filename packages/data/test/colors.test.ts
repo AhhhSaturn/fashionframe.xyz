@@ -122,7 +122,9 @@ describe("Colour Palettes Router", () => {
 			.get();
 
 		expect(error?.status).toBe(400);
-		expect(error?.value).toBe("FakePalette is not a palette");
+		expect(error?.value).toStrictEqual({
+			error: "FakePalette is not a palette",
+		});
 		expect(data).toBeNull();
 	});
 });
