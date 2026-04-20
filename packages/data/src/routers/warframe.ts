@@ -1,5 +1,6 @@
 import { file } from "bun";
 import Elysia from "elysia";
+import type { Warframe } from "../../types";
 
 const modules = {
 	Warframes: (await file("modules/Suits.json").json()) as Warframe[],

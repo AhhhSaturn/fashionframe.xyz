@@ -1,5 +1,12 @@
 import { write } from "bun";
 import { decompress } from "lzma-js-simple-v2";
+import type {
+	ColourPalette,
+	Flavour,
+	GenericEntry,
+	Module,
+	Warframe,
+} from "../types";
 
 const split = (module: Module, data: any) => {
 	const files = new Map<

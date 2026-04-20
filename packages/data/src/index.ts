@@ -91,5 +91,3 @@ api.listen(3000, async ({ development, hostname, port }) => {
 
 	console.log(ansi);
 });
-
-export type API = typeof api;

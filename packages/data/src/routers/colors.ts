@@ -1,5 +1,6 @@
 import { file } from "bun";
 import Elysia from "elysia";
+import type { ColourPalette } from "../../types";
 
 const modules = {
 	ColourPalettes: (await file(

@@ -2,7 +2,7 @@
 	"name": "@fashionframe.xyz/data",
 	"module": "src/index.ts",
 	"exports": {
-		".": "./src/index.ts"
+		"types": "./types.d.ts"
 	},
 	"description": "Warframe Cosmetic API",
 	"version": "1.1.0",

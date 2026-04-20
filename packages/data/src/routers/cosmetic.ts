@@ -1,5 +1,6 @@
 import { file } from "bun";
 import Elysia from "elysia";
+import type { GenericEntry } from "../../types";
 
 const modules = {
 	AnimationSet: (await file(

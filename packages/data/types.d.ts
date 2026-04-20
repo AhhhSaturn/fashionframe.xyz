@@ -1,3 +1,5 @@
+import type { api } from "./src";
+
 type Module =
 	| "Customs"
 	| "Drones"
@@ -69,7 +71,7 @@ type ColourPalette = {
 	uniqueName: string;
 	name: string;
 	description: string;
-	hexColours: { value: string }[];
+	hexColours: { value: string; selected?: boolean }[];
 	excludeFromCodex: boolean;
 	codexSecret: boolean;
 };
@@ -80,3 +82,5 @@ type GenericEntry = {
 	description: string;
 	codexSecret: boolean;
 };
+
+type API = typeof api;
