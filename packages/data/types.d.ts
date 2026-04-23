@@ -14,7 +14,6 @@ type Module =
 	| "Sentinels"
 	| "SortieRewards"
 	| "Upgrades"
-	| "Warframes"
 	| "Weapons"
 	| "Manifest";
 

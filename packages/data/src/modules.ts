@@ -1,4 +1,4 @@
-import { write } from "bun";
+import { file, write } from "bun";
 import { decompress } from "lzma-js-simple-v2";
 import type {
 	ColourPalette,
@@ -8,11 +8,29 @@ import type {
 	Warframe,
 } from "../types";
 
-const split = (module: Module, data: any) => {
-	const files = new Map<
-		string,
-		{ name: string; [key: string]: any }[] | string[]
-	>();
+// so we can wait for the Suits.json to exist
+class codeNameToFrameName {
+	private warframes = file("modules/Suits.json").json() as Promise<Warframe[]>;
+	convert = async (codeName: string) => {
+		if (codeName === "Anima") return "Equinox";
+		if (codeName === "Archer") return "Ivara";
+		if (codeName === "Asp") return "Saryn";
+		if (codeName === "Decree") return "Banshee";
+		if (codeName === "Horse") return "Dagath";
+		if (codeName === "Hydroid") return "Hydroid";
+		if (codeName === "Umbra") return "ExcaliburUmbra";
+		const frame = (await this.warframes).filter(
+			(frame) => frame.uniqueName.split("/")[3] === codeName,
+		)[0];
+
+		if (!frame?.name) return false;
+		return frame.name;
+	};
+}
+const { convert } = new codeNameToFrameName();
+
+const split = async (module: Module | "Warframes", data: any) => {
+	const files = new Map<string, any>();
 	switch (module) {
 		case "Warframes": {
 			const warframes: Warframe[] = data.ExportWarframes;
@@ -80,6 +98,7 @@ const split = (module: Module, data: any) => {
 			const legArmor: GenericEntry[] = [];
 			const shoulderArmor: GenericEntry[] = [];
 			const armArmor: GenericEntry[] = [];
+			const helmetArmor: { [key: string]: GenericEntry[] } = {};
 			const ephemera: GenericEntry[] = [];
 			const signa: GenericEntry[] = [];
 
@@ -115,6 +134,15 @@ const split = (module: Module, data: any) => {
 					signa.push(item);
 				} else if (item.name.includes("Syandana")) {
 					syandana.push(item);
+				} else if (item.uniqueName.includes("Helmet")) {
+					const helmetForCodeName = item.uniqueName.split("/")[4];
+					if (!helmetForCodeName) continue;
+					const helmetFor = await convert(helmetForCodeName);
+					if (!helmetFor) continue;
+
+					if (!helmetArmor[helmetFor]) helmetArmor[helmetFor] = [];
+
+					helmetArmor[helmetFor].push(item);
 				} else {
 					misc.push(item);
 				}
@@ -128,6 +156,7 @@ const split = (module: Module, data: any) => {
 			files.set("Ephemera", ephemera);
 			files.set("Signa", signa);
 			files.set("Syandana", syandana);
+			files.set("HelmetArmor", helmetArmor);
 			files.set("Misc", misc);
 			break;
 		}
@@ -147,7 +176,7 @@ const download = async (module: Module, hash: string) => {
 	const data = await fetch(getUrl(hash)).then((res) => res.json());
 	console.timeLog(module, "Downloaded");
 
-	const splitFiles = split(module, data);
+	const splitFiles = await split(module, data);
 	console.timeLog(module, `Split data file`);
 
 	for (const file of splitFiles) {
@@ -159,7 +188,9 @@ const download = async (module: Module, hash: string) => {
 	console.timeEnd(module);
 };
 
-export const downloadModules = async (modules: Module[]) => {
+export const downloadModules = async (
+	modules: ["Warframes", ...Module[]] | Module[],
+) => {
 	console.time("Updating Warframe Data");
 
 	console.time("Index");

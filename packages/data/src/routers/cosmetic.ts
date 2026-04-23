@@ -16,6 +16,9 @@ const modules = {
 		Shoulder: (await file(
 			"modules/ShoulderArmor.json",
 		).json()) as GenericEntry[],
+		Helmet: (await file("modules/HelmetArmor.json").json()) as {
+			[key: string]: GenericEntry[];
+		},
 	},
 };
 
@@ -29,5 +32,10 @@ export const cosmeticsRouter = new Elysia({ prefix: "cosmetics" })
 			.get("/arm", () => modules.Armor.Arm)
 			.get("/chest", () => modules.Armor.Chest)
 			.get("/leg", () => modules.Armor.Leg)
-			.get("/shoulder", () => modules.Armor.Shoulder),
+			.get("/shoulder", () => modules.Armor.Shoulder)
+			.get("/helmet/:warframe", ({ params: { warframe }, status }) => {
+				if (!modules.Armor.Helmet[warframe])
+					return status(400, `${warframe} is not a warframe`);
+				return modules.Armor.Helmet[warframe];
+			}),
 	);
