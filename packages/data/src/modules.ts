@@ -84,7 +84,26 @@ const split = async (module: Module | "Warframes", data: any) => {
 				} else if (item.uniqueName.includes("AvatarImages")) {
 					glyph.push(item);
 				} else if (item.name.includes("Animation Set")) {
-					animationSet.push(item);
+					// This might be reverted as I don't want to be editing warframe data but I do need code names to be converted before sending the data or things using the api will have to handle code name conversion themselves.
+
+					const codename = item.uniqueName.split("/")[4];
+					if (!codename) continue;
+					const name = await convert(codename);
+					if (!name) continue;
+
+					const modifiedItem: Flavour = {
+						codexSecret: item.codexSecret,
+						description: item.description,
+						name: item.name,
+						excludeFromCodex: item.excludeFromCodex,
+						uniqueName: item.uniqueName.replace(
+							codename,
+							name.replace(" Prime", ""),
+						),
+						hexColours: item.hexColours,
+					};
+
+					animationSet.push(modifiedItem);
 				}
 			}
 
@@ -140,26 +159,26 @@ const split = async (module: Module | "Warframes", data: any) => {
 				} else if (item.name.includes("Syandana")) {
 					syandana.push(item);
 				} else if (item.uniqueName.includes("Helmet")) {
-					const helmetForCodeName = item.uniqueName.split("/")[4];
-					if (!helmetForCodeName) continue;
-					const helmetFor = await convert(helmetForCodeName);
-					if (!helmetFor) continue;
+					const codename = item.uniqueName.split("/")[4];
+					if (!codename) continue;
+					const name = await convert(codename);
+					if (!name) continue;
 
-					if (!helmetArmor[helmetFor]) helmetArmor[helmetFor] = [];
+					if (!helmetArmor[name]) helmetArmor[name] = [];
 
-					helmetArmor[helmetFor].push(item);
+					helmetArmor[name].push(item);
 				} else if (
 					item.uniqueName.includes("/Lotus/Upgrades/Skins/") &&
 					item.name.includes("Skin")
 				) {
-					const skinForCodeName = item.uniqueName.split("/")[4];
-					if (!skinForCodeName) continue;
-					const skinFor = await convert(skinForCodeName);
-					if (!skinFor) continue;
+					const codename = item.uniqueName.split("/")[4];
+					if (!codename) continue;
+					const name = await convert(codename);
+					if (!name) continue;
 
-					if (!skins[skinFor]) skins[skinFor] = [];
+					if (!skins[name]) skins[name] = [];
 
-					skins[skinFor].push(item);
+					skins[name].push(item);
 				} else {
 					misc.push(item);
 				}
