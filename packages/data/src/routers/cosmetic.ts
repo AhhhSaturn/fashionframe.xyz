@@ -10,7 +10,9 @@ const modules = {
 	Signa: (await file("modules/Signa.json").json()) as GenericEntry[],
 	Syandanas: (await file("modules/Syandana.json").json()) as GenericEntry[],
 	Armor: {
-		Arm: (await file("modules/ArmArmor.json").json()) as GenericEntry[],
+		Shoulder: (await file(
+			"modules/ShoulderArmor.json",
+		).json()) as GenericEntry[],
 		Chest: (await file("modules/ChestArmor.json").json()) as GenericEntry[],
 		Leg: (await file("modules/LegArmor.json").json()) as GenericEntry[],
 		Helmet: (await file("modules/HelmetArmor.json").json()) as {
@@ -34,7 +36,7 @@ export const cosmeticsRouter = new Elysia({ prefix: "cosmetics" })
 	})
 	.group("/armor", (app) =>
 		app
-			.get("/arm", () => modules.Armor.Arm)
+			.get("/shoulder", () => modules.Armor.Shoulder)
 			.get("/chest", () => modules.Armor.Chest)
 			.get("/leg", () => modules.Armor.Leg)
 			.get("/helmet/:warframe", ({ params: { warframe }, status }) => {

@@ -33,8 +33,8 @@ describe("Cosmetic Router", () => {
 		expect(error).toBeNull();
 		expect(data).toBeArray();
 	});
-	test("Arm Armor", async () => {
-		const { data, error } = await api.cosmetics.armor.arm.get();
+	test("Shoulder Armor", async () => {
+		const { data, error } = await api.cosmetics.armor.shoulder.get();
 
 		expect(error).toBeNull();
 		expect(data).toBeArray();
