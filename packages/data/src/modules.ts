@@ -11,7 +11,11 @@ import type {
 // so we can wait for the Suits.json to exist
 class codeNameToFrameName {
 	private warframes = file("modules/Suits.json").json() as Promise<Warframe[]>;
+	private warframeList = file("modules/WarframeList.json").json() as Promise<
+		string[]
+	>;
 	convert = async (codeName: string) => {
+		if ((await this.warframeList).includes(codeName)) return codeName;
 		if (codeName === "Anima") return "Equinox";
 		if (codeName === "Archer") return "Ivara";
 		if (codeName === "Asp") return "Saryn";
