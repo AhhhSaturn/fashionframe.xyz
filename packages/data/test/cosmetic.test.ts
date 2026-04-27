@@ -57,4 +57,28 @@ describe("Cosmetic Router", () => {
 		expect(error).toBeNull();
 		expect(data).toBeArray();
 	});
+	test("Valid Helmet Armor", async () => {
+		const { data, error } = await api.cosmetics.armor
+			.helmet({ warframe: "Ash" })
+			.get();
+
+		expect(error).toBeNull();
+
+		const ashHelmet = data?.filter(
+			(warframe) => warframe.name === "Ash Helmet",
+		);
+		expect(ashHelmet?.length).toBe(1);
+	});
+	test("Invalid Helmet Armor", async () => {
+		const { data, error } = await api.cosmetics.armor
+			.helmet({ warframe: "Ash" })
+			.get();
+
+		expect(error).toBeNull();
+
+		const ashHelmet = data?.filter(
+			(warframe) => warframe.name === "FakeFrameHelmet",
+		);
+		expect(ashHelmet?.length).toBe(0);
+	});
 });
