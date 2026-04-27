@@ -105,6 +105,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 			const helmetArmor: { [key: string]: GenericEntry[] } = {};
 			const ephemera: GenericEntry[] = [];
 			const signa: GenericEntry[] = [];
+			const skins: { [key: string]: GenericEntry[] } = {};
 
 			const misc: GenericEntry[] = [];
 
@@ -147,6 +148,18 @@ const split = async (module: Module | "Warframes", data: any) => {
 					if (!helmetArmor[helmetFor]) helmetArmor[helmetFor] = [];
 
 					helmetArmor[helmetFor].push(item);
+				} else if (
+					item.uniqueName.includes("/Lotus/Upgrades/Skins/") &&
+					item.name.includes("Skin")
+				) {
+					const skinForCodeName = item.uniqueName.split("/")[4];
+					if (!skinForCodeName) continue;
+					const skinFor = await convert(skinForCodeName);
+					if (!skinFor) continue;
+
+					if (!skins[skinFor]) skins[skinFor] = [];
+
+					skins[skinFor].push(item);
 				} else {
 					misc.push(item);
 				}
@@ -161,6 +174,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 			files.set("Signa", signa);
 			files.set("Syandana", syandana);
 			files.set("HelmetArmor", helmetArmor);
+			files.set("Skins", skins);
 			files.set("Misc", misc);
 			break;
 		}
