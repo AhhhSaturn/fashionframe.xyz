@@ -119,7 +119,6 @@ const split = async (module: Module | "Warframes", data: any) => {
 			const syandana: GenericEntry[] = [];
 			const chestArmor: GenericEntry[] = [];
 			const legArmor: GenericEntry[] = [];
-			const shoulderArmor: GenericEntry[] = [];
 			const armArmor: GenericEntry[] = [];
 			const helmetArmor: { [key: string]: GenericEntry[] } = {};
 			const ephemera: GenericEntry[] = [];
@@ -135,7 +134,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 				} else if (item.name.includes("Arm")) {
 					armArmor.push(item);
 				} else if (item.name.includes("Shoulder")) {
-					shoulderArmor.push(item);
+					armArmor.push(item);
 				} else if (item.name.includes("Leg")) {
 					legArmor.push(item);
 				} else if (item.name.includes("Knee")) {
@@ -151,7 +150,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 				} else if (item.name.includes("Ribbon")) {
 					chestArmor.push(item);
 				} else if (item.name.includes("Spaulders")) {
-					shoulderArmor.push(item);
+					armArmor.push(item);
 				} else if (item.uniqueName.includes("Ephemera")) {
 					ephemera.push(item);
 				} else if (item.uniqueName.includes("Signa")) {
@@ -187,7 +186,6 @@ const split = async (module: Module | "Warframes", data: any) => {
 			files.set("Syandana", syandana);
 			files.set("ChestArmor", chestArmor);
 			files.set("LegArmor", legArmor);
-			files.set("ShoulderArmor", shoulderArmor);
 			files.set("ArmArmor", armArmor);
 			files.set("Ephemera", ephemera);
 			files.set("Signa", signa);

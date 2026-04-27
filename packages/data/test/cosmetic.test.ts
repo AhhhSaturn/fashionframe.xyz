@@ -51,12 +51,6 @@ describe("Cosmetic Router", () => {
 		expect(error).toBeNull();
 		expect(data).toBeArray();
 	});
-	test("Shoulder Armor", async () => {
-		const { data, error } = await api.cosmetics.armor.shoulder.get();
-
-		expect(error).toBeNull();
-		expect(data).toBeArray();
-	});
 	test("Valid Helmet Armor", async () => {
 		const { data, error } = await api.cosmetics.armor
 			.helmet({ warframe: "Ash" })
