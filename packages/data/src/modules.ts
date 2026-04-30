@@ -153,7 +153,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 					shoulderArmor.push(item);
 				} else if (item.uniqueName.includes("Ephemera")) {
 					ephemera.push(item);
-				} else if (item.uniqueName.includes("Signa")) {
+				} else if (item.uniqueName.includes("/Lotus/Upgrades/Skins/Crowns")) {
 					signa.push(item);
 				} else if (item.name.includes("Syandana")) {
 					syandana.push(item);
