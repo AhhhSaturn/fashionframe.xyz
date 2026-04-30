@@ -22,6 +22,7 @@ const modules = {
 	Skins: (await file("modules/Skins.json").json()) as {
 		[key: string]: GenericEntry[];
 	},
+	Auxiliary: (await file("modules/Auxiliary.json").json()) as GenericEntry[],
 };
 
 export const cosmeticsRouter = new Elysia({ prefix: "cosmetics" })
@@ -29,6 +30,7 @@ export const cosmeticsRouter = new Elysia({ prefix: "cosmetics" })
 	.get("/ephemera", () => modules.Ephemera)
 	.get("/signa", () => modules.Signa)
 	.get("/syandana", () => modules.Syandanas)
+	.get("/auxiliary", () => modules.Auxiliary)
 	.get("/skin/:warframe", ({ params: { warframe }, status }) => {
 		if (!modules.Skins[warframe])
 			return status(400, `${warframe} is not a warframe`);

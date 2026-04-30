@@ -123,6 +123,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 			const helmetArmor: { [key: string]: GenericEntry[] } = {};
 			const ephemera: GenericEntry[] = [];
 			const signa: GenericEntry[] = [];
+			const auxiliary: GenericEntry[] = [];
 			const skins: { [key: string]: GenericEntry[] } = {};
 
 			const misc: GenericEntry[] = [];
@@ -178,6 +179,8 @@ const split = async (module: Module | "Warframes", data: any) => {
 					if (!skins[name]) skins[name] = [];
 
 					skins[name].push(item);
+				} else if (item.uniqueName.includes("AuxHat")) {
+					auxiliary.push(item);
 				} else {
 					misc.push(item);
 				}
@@ -192,6 +195,7 @@ const split = async (module: Module | "Warframes", data: any) => {
 			files.set("Syandana", syandana);
 			files.set("HelmetArmor", helmetArmor);
 			files.set("Skins", skins);
+			files.set("Auxiliary", auxiliary);
 			files.set("Misc", misc);
 			break;
 		}

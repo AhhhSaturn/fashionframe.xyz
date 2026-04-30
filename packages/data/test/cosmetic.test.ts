@@ -21,6 +21,12 @@ describe("Cosmetic Router", () => {
 		expect(error).toBeNull();
 		expect(data).toBeArray();
 	});
+	test("Auxiliary", async () => {
+		const { data, error } = await api.cosmetics.auxiliary.get();
+
+		expect(error).toBeNull();
+		expect(data).toBeArray();
+	});
 	test("Signa", async () => {
 		const { data, error } = await api.cosmetics.signa.get();
 
